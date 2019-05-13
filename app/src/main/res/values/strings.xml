@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">VoyageCeff</string>
+    <string name="label_accueil">Accueil</string>
+    <string name="label_calendrier">Calendrier</string>
+    <string name="label_check_list">Check List</string>
+    <string name="label_reglements">Règlements</string>
+    <string name="label_parametres">Paramètres</string>
 </resources>
