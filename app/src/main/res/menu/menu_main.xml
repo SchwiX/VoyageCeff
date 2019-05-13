@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="ch.ceff.android.bornedecommande.MainActivity">
+
+    <item android:id="@+id/action_accueil" android:title="Accueil" android:icon="@drawable/ic_home" app:showAsAction="always" android:orderInCategory="1"/>
+    <item android:id="@+id/action_calendrier" android:title="Calendrier" android:icon="@drawable/ic_calendar" app:showAsAction="always" android:orderInCategory="2"/>
+    <item android:id="@+id/action_check_list" android:title="Check List" android:icon="@drawable/ic_check_list" app:showAsAction="never" android:orderInCategory="3"/>
+    <item android:id="@+id/action_reglements" android:title="Règlements" android:icon="@drawable/ic_rules" app:showAsAction="never" android:orderInCategory="4"/>
+    <item android:id="@+id/action_parametres" android:title="Paramètres" android:icon="@drawable/ic_settings" app:showAsAction="ifRoom" android:orderInCategory="5"/>
+
+</menu>
