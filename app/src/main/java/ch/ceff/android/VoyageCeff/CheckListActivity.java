@@ -6,6 +6,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 public class CheckListActivity extends AppCompatActivity {
 
@@ -30,5 +33,13 @@ public class CheckListActivity extends AppCompatActivity {
         this.getWindow().getDecorView().setBackgroundResource(background);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(couleur)));
         /** **/
+
+        Button fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Hello world");
+            }
+        });
     }
 }
