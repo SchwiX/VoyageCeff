@@ -11,9 +11,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
@@ -22,7 +19,7 @@ public class CheckListActivity extends AppCompatActivity {
     private static final String TAG = CheckListActivity.class.getSimpleName();
     private ArrayList<String> mCheckList = new ArrayList<>();
     private RecyclerView mRecyclerView;
-    private WordListAdapter mAdapter;
+    private CheckListAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,14 +56,11 @@ public class CheckListActivity extends AppCompatActivity {
 
     private void init() {
         mRecyclerView = findViewById(R.id.check_list_recycler_view);
-        mAdapter = new WordListAdapter(this, mCheckList);
+        mAdapter = new CheckListAdapter(this, mCheckList);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     }
-
-
-
 
     private void newBox(String s) {
         int wordListSize = mCheckList.size();
