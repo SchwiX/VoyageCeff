@@ -1,12 +1,17 @@
 package ch.ceff.android.VoyageCeff;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 
 import java.util.ArrayList;
 
@@ -16,6 +21,7 @@ public class CheckListActivity extends AppCompatActivity {
     private ArrayList<String> mCheckList = new ArrayList<>();
     private RecyclerView mRecyclerView;
     private CheckListAdapter mAdapter;
+    private String m_Text = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +35,8 @@ public class CheckListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "I'm trying to add something");
-                //TODO : Be able to choose the text !
-                newBox("Test");
+                //TODO : Can delete after insert !
+                showAddItemDialog(CheckListActivity.this);
             }
         });
     }
@@ -41,6 +47,37 @@ public class CheckListActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+    }
+
+
+    private void showAddItemDialog(Context c) {
+        //TODO : Cleaner dialog box !
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        builder.setTitle("Add an item");
+        builder.setMessage("Name :");
+
+        // Set up the input
+        final EditText input = new EditText(c);
+        final EditText input2 = new EditText(c);
+        // Specify the type of input expected
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                m_Text = input.getText().toString();
+                newBox(m_Text);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
     }
 
     private void newBox(String s) {
