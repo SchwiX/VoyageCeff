@@ -3,6 +3,7 @@ package ch.ceff.android.VoyageCeff;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -10,41 +11,50 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
+
 public class CheckListActivity extends AppCompatActivity {
 
     private static final String TAG = CheckListActivity.class.getSimpleName();
+    private ArrayList<String> mCheckList = new ArrayList<>();
+    private RecyclerView mRecyclerView;
+    private WordListAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_list);
 
+        init();
+
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "I'm trying to add something");
+                //TODO : Be able to choose the text !
                 newBox("Test");
             }
         });
     }
 
-    private void newBox(String s) {
-        //TODO: Implement everything to use recycler view !
-        RecyclerView rec = findViewById(R.id.check_list_recycler_view);
-        CheckBox check = new CheckBox(this);
-        check.setText(s);
-        rec.addView(check);
-        Log.d(TAG, "It's suppose to add now");
+    private void init() {
+        mRecyclerView = findViewById(R.id.check_list_recycler_view);
+        mAdapter = new WordListAdapter(this, mCheckList);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        /*Old code with linear :
-        LinearLayout lay = findViewById(R.id.check_list_linear_layout);
-        CheckBox check = new CheckBox(this);
-        check.setText(s);
-        lay.addView(check);
-        Log.d(TAG, "It's suppose to add now");
-         * This has placements issues
-         */
     }
+
+
+
+
+    private void newBox(String s) {
+        int wordListSize = mCheckList.size();
+        mCheckList.add(s);
+        mRecyclerView.getAdapter().notifyItemInserted(wordListSize);
+        mRecyclerView.smoothScrollToPosition(wordListSize);
+    }
+
 
 }
