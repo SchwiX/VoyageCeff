@@ -6,4 +6,86 @@
     android:layout_height="match_parent"
     tools:context=".ParametresActivity">
 
+    <TextView
+        android:id="@+id/tv_couleurFont"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/couleur_du_menu"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_color_primary"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/colorPrimary"
+        android:onClick="setColorPrimary"
+        app:layout_constraintStart_toEndOf="@+id/btn_color_olive"
+        app:layout_constraintTop_toBottomOf="@+id/tv_couleurFont" />
+
+    <Button
+        android:id="@+id/btn_color_rouge"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/rouge"
+        android:onClick="setColorRouge"
+        app:layout_constraintStart_toEndOf="@+id/btn_color_bleu"
+        app:layout_constraintTop_toBottomOf="@+id/tv_couleurFont" />
+
+    <Button
+        android:id="@+id/btn_color_olive"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/jaune"
+        android:onClick="setColorJaune"
+        app:layout_constraintStart_toEndOf="@+id/btn_color_orange"
+        app:layout_constraintTop_toBottomOf="@+id/tv_couleurFont" />
+
+    <Button
+        android:id="@+id/btn_color_orange"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/orange"
+        android:onClick="setColorOrange"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_couleurFont" />
+
+    <Button
+        android:id="@+id/btn_color_bleu"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/bleu"
+        android:onClick="setColorBleu"
+        app:layout_constraintStart_toEndOf="@+id/btn_color_primary"
+        app:layout_constraintTop_toBottomOf="@+id/tv_couleurFont" />
+
+    <TextView
+        android:id="@+id/tv_background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="36dp"
+        android:text="@string/image_de_fond"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_color_orange" />
+
 </android.support.constraint.ConstraintLayout>

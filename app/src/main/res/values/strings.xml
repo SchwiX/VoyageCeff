@@ -6,4 +6,14 @@
     <string name="label_reglements">Règlements</string>
     <string name="label_parametres">Paramètres</string>
     <string name="label_ajouter_jour">Ajouter un jour</string>
+    <string name="couleur_du_menu">Couleur du menu</string>
+    <string name="sauvegarder">Sauvegarder</string>
+    <string name="image_de_fond">Image de fond</string>
+
+    <string-array name="color_array">
+        <item>Base</item>
+        <item>Orange</item>
+        <item>Bleu</item>
+        <item>Rouge</item>
+    </string-array>
 </resources>
