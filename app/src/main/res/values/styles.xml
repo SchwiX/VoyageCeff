@@ -31,6 +31,12 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="checklist_title">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
     <!--  Styles pour l'activité calendrier -->
     <style name="add_day">
         <item name="android:gravity">center_vertical</item>
