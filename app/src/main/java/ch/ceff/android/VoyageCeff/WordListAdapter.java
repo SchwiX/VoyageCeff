@@ -15,7 +15,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
     private final ArrayList<String> mWordList;
     private LayoutInflater mInflater;
 
-    class WordViewHolder extends RecyclerView.ViewHolder{
+    class WordViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final TextView wordItemView; //représente le composant qui affichera le mot dans le layout
         final WordListAdapter mAdapter; //représente l'adapter
 
@@ -23,6 +23,14 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
             super(itemView);
             wordItemView = itemView.findViewById(R.id.word);
             this.mAdapter = adapter;
+        }
+
+        @Override
+        public void onClick(View v) {
+            int mPosition = getLayoutPosition();
+            String element = mWordList.get(mPosition);
+            mWordList.set(mPosition, "Cliqué! " + element);
+            mAdapter.notifyDataSetChanged();
         }
     }
 
