@@ -90,6 +90,8 @@ public class CalendrierActivity extends AppCompatActivity {
         tv.setOnClickListener(new View.OnClickListener() { // Quand on clic sur le jour
             @Override
             public void onClick(View v) {
+                actualCalendar = calendar; // Calendrier actuellement ouvert
+                // TODO ajouter seulement si on a jamais ajouter le tvInsideAdd --> regarder avec nbre children
                 TextView tvInsideAdd = new TextView(context, null, 0, R.style.scroll_view_inside_add);
 
                 tvInsideAdd.setOnClickListener(new View.OnClickListener() {
@@ -156,7 +158,22 @@ public class CalendrierActivity extends AppCompatActivity {
         linearLayout.removeAllViews();
         for (Map.Entry<Calendar, GridLayout> entry : map.entrySet()) {
             //System.out.println(entry.getKey() + "/" + entry.getValue());
-            linearLayout.addView(entry.getValue());
+            if(entry.getKey() == actualCalendar){ // Si c'est le calendrier actuel --> affiche les activités
+                // TODO reparer bug visibilité 1 seul jour a la fois
+                // remet tous les enfants visibles sauf le jour
+                for(int i=1; i<entry.getValue().getChildCount(); i++) {
+                    TextView child = (TextView)entry.getValue().getChildAt(i);
+                    child.setVisibility(View.VISIBLE);
+                }
+                linearLayout.addView(entry.getValue()); // visible
+            }else{
+                // met l'attibut visibility invisible a tous les enfants sauf le jour
+                for(int i=1; i<entry.getValue().getChildCount(); i++) {
+                    TextView child = (TextView)entry.getValue().getChildAt(i);
+                    child.setVisibility(View.INVISIBLE);
+                }
+                linearLayout.addView(entry.getValue());
+            }
         }
     }
 }
