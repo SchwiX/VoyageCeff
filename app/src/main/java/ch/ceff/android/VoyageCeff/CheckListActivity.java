@@ -10,10 +10,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
+
+import static java.security.AccessController.getContext;
 
 public class CheckListActivity extends AppCompatActivity {
 
@@ -35,7 +40,7 @@ public class CheckListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "I'm trying to add something");
-                //TODO : Can delete after insert !
+                //TODO : Can delete after insert ! (Maybe add X button)
                 showAddItemDialog(CheckListActivity.this);
             }
         });
@@ -51,7 +56,7 @@ public class CheckListActivity extends AppCompatActivity {
 
 
     private void showAddItemDialog(Context c) {
-        //TODO : Cleaner dialog box !
+        //TODO : Cleaner dialog box ! (Try use checklist_dialog_box.xml)
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
         builder.setTitle("Add an item");
         builder.setMessage("Name :");
@@ -61,17 +66,28 @@ public class CheckListActivity extends AppCompatActivity {
         final EditText input2 = new EditText(c);
         // Specify the type of input expected
         input.setInputType(InputType.TYPE_CLASS_TEXT);
+
+        /*
+        LinearLayout lila1= new LinearLayout(this);
+        lila1.setOrientation(LinearLayout.VERTICAL);
+
+        lila1.addView(input);
+        lila1.addView(input2);
+        builder.setView(lila1);
+        */
+
         builder.setView(input);
 
+
         // Set up the buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 m_Text = input.getText().toString();
                 newBox(m_Text);
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
