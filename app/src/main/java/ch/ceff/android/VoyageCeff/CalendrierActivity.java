@@ -24,6 +24,7 @@ public class CalendrierActivity extends AppCompatActivity {
     //public static final String EXTRA_MESSAGE = "ch.ceff.android.VoyageCeff";
     public static final int ADD_DAY_REQUEST = 1;
     public static final int SELECT_TIME_REQUEST = 2;
+    public static final int ADD_ACTIVITY_REQUEST = 3;
     private FloatingActionButton fab;
     private Context context;
     private LinearLayout linearLayout;
@@ -57,7 +58,6 @@ public class CalendrierActivity extends AppCompatActivity {
                 int dateMonth = data.getIntExtra(CalendrierAjouterJourActivity.EXTRA_REPLY_MONTH, 1);
                 int dateDay = data.getIntExtra(CalendrierAjouterJourActivity.EXTRA_REPLY_DAY, 1);
                 Calendar calendar = new GregorianCalendar(dateYear, dateMonth, dateDay);
-                actualCalendar = calendar; // Calendrier actuellement ouvert
                 addDay(calendar);
                 Toast.makeText(this, String.format("%tD", calendar), Toast.LENGTH_SHORT).show();
             }
@@ -69,26 +69,35 @@ public class CalendrierActivity extends AppCompatActivity {
                 int endHour = data.getIntExtra(TimePickerActivity.EXTRA_REPLY_END_HOUR, 13);
                 int endMinute = data.getIntExtra(TimePickerActivity.EXTRA_REPLY_END_MINUTE, 30);
                 String titreActivite = data.getStringExtra(TimePickerActivity.EXTRA_REPLY_TITRE_ACTIVITE);
-                // TODO ajouter l'activité dans le calendrier
-                        // on sauvegarde l'instance du calendar clique et on regarde dans la loop en fonction ....
+                // Ajoute l'activité
+                addActivity(startHour, startMinute, endHour, endMinute, titreActivite);
+            }
+        }else if(requestCode == ADD_ACTIVITY_REQUEST){
+            if(resultCode == RESULT_OK){
+                Toast.makeText(this, "Rendez-vous ajouté", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    public void addDay(Calendar calendar){
+    public void addDay(final Calendar calendar){
         final GridLayout gridLayout = new GridLayout(context); // Crée le grid layout
+        actualCalendar = calendar; // Calendrier actuellement ouvert
 
         // Crée la text view à ajouter dans le scroll view
         TextView tv = new TextView(context, null, 0, R.style.scroll_view_day); // Text view principale
         tv.setText(String.format("%tD", calendar));
-        tv.setOnClickListener(new View.OnClickListener() {
+
+        tv.setOnClickListener(new View.OnClickListener() { // Quand on clic sur le jour
             @Override
             public void onClick(View v) {
+                actualCalendar = calendar; // Calendrier actuellement ouvert
+
                 TextView tvInsideAdd = new TextView(context, null, 0, R.style.scroll_view_inside_add);
 
                 tvInsideAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) { // Ajoute une nouvelle heure avec activité
+                        actualCalendar = calendar; // Calendrier actuellement ouvert
                         // Ouvre l'activité pour choisir l'heure de début et fin
                         Log.d(TAG, "Démarre l'activité TimePickerActivity pour choisir l'heure de début et fin de l'activité");
                         Intent intent = new Intent(context, TimePickerActivity.class);
@@ -96,6 +105,7 @@ public class CalendrierActivity extends AppCompatActivity {
                     }
                 });
 
+                // Positionne la vue
                 GridLayout.Spec row = GridLayout.spec(1);
                 GridLayout.Spec column = GridLayout.spec(0);
 
@@ -103,7 +113,8 @@ public class CalendrierActivity extends AppCompatActivity {
             }
         });
 
-        GridLayout.Spec row = GridLayout.spec(0); // Première ligne
+        // Positionne la vue
+        GridLayout.Spec row = GridLayout.spec(0);
         GridLayout.Spec column = GridLayout.spec(0);
 
         gridLayout.addView(tv, new GridLayout.LayoutParams(row, column));
@@ -114,28 +125,54 @@ public class CalendrierActivity extends AppCompatActivity {
     }
 
     // Ajoute une activité
-    public void addActivity(Calendar calendar, int startHour, int startMinute, int endHour, int endMinute, String title){
-        Calendar beginTime = Calendar.getInstance();
-        beginTime.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), startHour, startMinute); // year month day hour min
-        Calendar endTime = Calendar.getInstance();
-        endTime.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), endHour, endMinute);
-        Intent intent = new Intent(Intent.ACTION_INSERT)
-                .setData(CalendarContract.Events.CONTENT_URI)
-                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
-                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTimeInMillis())
-                .putExtra(CalendarContract.Events.TITLE, title)
-                .putExtra(CalendarContract.Events.DESCRIPTION, "Description")
-                .putExtra(CalendarContract.Events.EVENT_LOCATION, "Localisation")
-                .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY)
-                .putExtra(Intent.EXTRA_EMAIL, "example@example.com");
-        startActivity(intent);
-    }
-
-    public void refresh(){
+    public void addActivity(int startHour, int startMinute, int endHour, int endMinute, String title){
         linearLayout.removeAllViews();
         for (Map.Entry<Calendar, GridLayout> entry : map.entrySet()) {
             //System.out.println(entry.getKey() + "/" + entry.getValue());
-            linearLayout.addView(entry.getValue());
+            if(entry.getKey() == actualCalendar){ // On est dans le bon calendrier
+                // Crée la text view à ajouter dans le scroll view
+                TextView tv = new TextView(context, null, 0, R.style.scroll_view_inside);
+                tv.setText(title + " de "+startHour+":"+startMinute+" à "+endHour+":"+endMinute);
+
+                // Récupère tvInsideAdd
+                TextView tvInsideAdd = (TextView)entry.getValue().getChildAt( entry.getValue().getChildCount() - 1);
+
+                // Ajoute la vue dans le grid layout à la place de tvInsideAdd
+                GridLayout.Spec row = GridLayout.spec(entry.getValue().getChildCount() - 1);
+                GridLayout.Spec column = GridLayout.spec(0);
+                entry.getValue().removeView(tvInsideAdd); // Supprime la vue actuelle pour pouvoir la remplacer
+                entry.getValue().addView(tv, new GridLayout.LayoutParams(row, column)); // Ajoute la vue a la place de tvInsideAdd
+
+                // Décale tvInsideAdd vers le bas
+                row = GridLayout.spec(entry.getValue().getChildCount());
+                column = GridLayout.spec(0);
+                entry.getValue().addView(tvInsideAdd, new GridLayout.LayoutParams(row, column)); // Remet tvInsideAdd
+            }
+        }
+
+        refresh();
+    }
+
+    public void refresh(){
+        // Recrée entièrement l'affichage dans le linear layout
+        linearLayout.removeAllViews();
+        for (Map.Entry<Calendar, GridLayout> entry : map.entrySet()) {
+            //System.out.println(entry.getKey() + "/" + entry.getValue());
+            if(entry.getKey() == actualCalendar){ // Si c'est le calendrier actuel --> affiche les activités
+                // remet tous les enfants visibles sauf le jour
+                for(int i=1; i<entry.getValue().getChildCount(); i++) {
+                    TextView child = (TextView)entry.getValue().getChildAt(i);
+                    child.setVisibility(View.VISIBLE);
+                }
+                linearLayout.addView(entry.getValue()); // visible
+            }else{
+                // met l'attibut visibility invisible a tous les enfants sauf le jour
+                for(int i=1; i<entry.getValue().getChildCount(); i++) {
+                    TextView child = (TextView)entry.getValue().getChildAt(i);
+                    child.setVisibility(View.INVISIBLE);
+                }
+                linearLayout.addView(entry.getValue());
+            }
         }
     }
 }

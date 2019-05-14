@@ -20,6 +20,7 @@
             android:id="@+id/linear_layout_scroll_view"
             >
 
+            <!--
             <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -47,6 +48,7 @@
                 <TextView style="@style/scroll_view_inside_add" />
 
             </GridLayout>
+            -->
 
         </LinearLayout>
     </ScrollView>
