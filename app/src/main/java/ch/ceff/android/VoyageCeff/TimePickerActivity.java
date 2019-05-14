@@ -41,30 +41,33 @@ public class TimePickerActivity extends AppCompatActivity {
     }
 
     public void btnAddActivityPressed(View view) {
+        int startHour, startMinute;
+        int endHour, endMinute;
+
+        startHour = startTimePicker.getHour();
+        startMinute = startTimePicker.getMinute();
+
+        endHour = endTimePicker.getHour();
+        endMinute = endTimePicker.getMinute();
         String titre = titreActivite.getText().toString();
+
         if(!titre.equals("")){
+            if((startHour < endHour) || (startMinute < endMinute)){
+                // Retourne l'heure de début et de fin
+                Log.d(TAG, "TimePickerActivity retourne l'heure de début et de fin de l'activité");
+                Intent replyIntent = new Intent(this, TimePickerActivity.class);
 
-            int startHour, startMinute;
-            int endHour, endMinute;
+                replyIntent.putExtra(EXTRA_REPLY_START_HOUR, startHour);
+                replyIntent.putExtra(EXTRA_REPLY_START_MINUTE, startMinute);
+                replyIntent.putExtra(EXTRA_REPLY_END_HOUR, endHour);
+                replyIntent.putExtra(EXTRA_REPLY_END_MINUTE, endMinute);
+                replyIntent.putExtra(EXTRA_REPLY_TITRE_ACTIVITE, titre);
 
-            startHour = startTimePicker.getHour();
-            startMinute = startTimePicker.getMinute();
-
-            endHour = endTimePicker.getHour();
-            endMinute = endTimePicker.getMinute();
-
-            // Retourne l'heure de début et de fin
-            Log.d(TAG, "TimePickerActivity retourne l'heure de début et de fin de l'activité");
-            Intent replyIntent = new Intent(this, TimePickerActivity.class);
-
-            replyIntent.putExtra(EXTRA_REPLY_START_HOUR, startHour);
-            replyIntent.putExtra(EXTRA_REPLY_START_MINUTE, startMinute);
-            replyIntent.putExtra(EXTRA_REPLY_END_HOUR, endHour);
-            replyIntent.putExtra(EXTRA_REPLY_END_MINUTE, endMinute);
-            replyIntent.putExtra(EXTRA_REPLY_TITRE_ACTIVITE, titre);
-
-            setResult(RESULT_OK, replyIntent);
-            finish();
+                setResult(RESULT_OK, replyIntent);
+                finish();
+            }else{
+                Toast.makeText(this, "Temps de l'activité invalide", Toast.LENGTH_SHORT).show();
+            }
         }else{
             Toast.makeText(this, "Merci de donner un titre à l'activité", Toast.LENGTH_SHORT).show();
         }
