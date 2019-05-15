@@ -18,6 +18,8 @@ public class ReglementsActivity extends AppCompatActivity {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String couleur = preferences.getString("getCouleur", "#008577");
+        int background = preferences.getInt("getBackground",0);
+        this.getWindow().getDecorView().setBackgroundResource(background);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(couleur)));
     }
 }
