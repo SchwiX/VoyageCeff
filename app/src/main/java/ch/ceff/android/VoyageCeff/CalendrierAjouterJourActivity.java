@@ -35,7 +35,7 @@ public class CalendrierAjouterJourActivity extends AppCompatActivity {
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                dateMonth = month;
+                dateMonth = month+1; // Car basé sur index 0
                 dateYear = year;
                 dateDay = dayOfMonth;
             }

@@ -19,41 +19,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/linear_layout_scroll_view"
             >
-
-            <!--
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:text="21 Lundi"
-                    style="@style/scroll_view_day" />
-                <TextView
-                    android:text="14:00 - Visite musé"
-                    style="@style/scroll_view_inside" />
-                <TextView style="@style/scroll_view_inside_add" />
-
-            </GridLayout>
-
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:text="22 Mardi"
-                    style="@style/scroll_view_day" />
-                <TextView
-                    android:text="14:00 - Visite musé"
-                    style="@style/scroll_view_inside" />
-                <TextView style="@style/scroll_view_inside_add" />
-
-            </GridLayout>
-            -->
-
         </LinearLayout>
     </ScrollView>
-
-
 
     <!-- FAB -->
     <android.support.design.widget.FloatingActionButton
