@@ -72,12 +72,19 @@ public class ReglementsActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+    private void init(String text){
+        int wordListSize = mWordList.size();
+        mWordList.add(text);
+        mRecyclerView.getAdapter().notifyItemInserted(wordListSize);
+        mRecyclerView.smoothScrollToPosition(wordListSize);
+    }
+
     protected Dialog onCreateDialog(int id)
     {
         final AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
         LinearLayout lila1= new LinearLayout(this);
-        lila1.setOrientation(LinearLayout.VERTICAL); //1 is for vertical orientation
+        lila1.setOrientation(LinearLayout.VERTICAL);
         final EditText input = new EditText(this);
         final EditText input1 = new EditText(this);
         lila1.addView(input);
@@ -90,7 +97,9 @@ public class ReglementsActivity extends AppCompatActivity {
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 String value = input.getText().toString().trim();
-                Toast.makeText(getApplicationContext(), value, Toast.LENGTH_SHORT).show();
+                String value1 = input1.getText().toString().trim();
+                init(value);
+                init(value1);
             }
         });
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
