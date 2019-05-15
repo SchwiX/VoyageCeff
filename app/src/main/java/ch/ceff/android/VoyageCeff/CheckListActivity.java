@@ -17,7 +17,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
@@ -97,7 +99,6 @@ public class CheckListActivity extends AppCompatActivity {
 
         builder.setView(input);
 
-
         // Set up the buttons
         builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
             @Override
@@ -121,6 +122,4 @@ public class CheckListActivity extends AppCompatActivity {
         mRecyclerView.getAdapter().notifyItemInserted(wordListSize);
         mRecyclerView.smoothScrollToPosition(wordListSize);
     }
-
-
 }

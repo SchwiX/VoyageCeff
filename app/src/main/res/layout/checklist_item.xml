@@ -9,13 +9,13 @@
     <!--TODO: Add button with cross for remove to the right -->
     <CheckBox
         android:id="@+id/word"
+        style="@style/checklist_title"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        style="@style/checklist_title" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
