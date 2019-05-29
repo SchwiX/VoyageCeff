@@ -5,6 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,7 +40,22 @@ public class CalendrierActivity extends AppCompatActivity implements DayListAdap
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /** PART 1 **/
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        //int texteCouleur = preferences.getInt("getTexteCouleur", R.style.AppTheme);
+        int texteCouleur = preferences.getInt("getTexteCouleur", 0);
+        setTheme(texteCouleur);
+        /**  **/
+
         setContentView(R.layout.activity_calendrier);
+
+        /** PART 2 **/
+        String couleur = preferences.getString("getCouleur", "#008577");
+        int background = preferences.getInt("getBackground",R.color.blanc);
+        this.getWindow().getDecorView().setBackgroundResource(background);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(couleur)));
+        /** **/
         context = this;
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener(){
