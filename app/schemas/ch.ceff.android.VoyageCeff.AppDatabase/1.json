@@ -1,0 +1,52 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "55912508c8028450f036f237931aff81",
+    "entities": [
+      {
+        "tableName": "tb_dates",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userid` TEXT, `dateYear` INTEGER, `dateMonth` INTEGER, `dateDay` INTEGER, `localDate` TEXT, PRIMARY KEY(`userid`))",
+        "fields": [
+          {
+            "fieldPath": "mId",
+            "columnName": "userid",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "dateYear",
+            "columnName": "dateYear",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "dateMonth",
+            "columnName": "dateMonth",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "dateDay",
+            "columnName": "dateDay",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "localDate",
+            "columnName": "localDate",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "userid"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"55912508c8028450f036f237931aff81\")"
+    ]
+  }
+}

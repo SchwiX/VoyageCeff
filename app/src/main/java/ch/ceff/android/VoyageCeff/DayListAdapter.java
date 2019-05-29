@@ -82,7 +82,6 @@ public class DayListAdapter extends RecyclerView.Adapter<DayListAdapter.DayViewH
         private DayListAdapter mAdapter; //représente l'adapter (classe parent)
         private View itemView;
 
-        /** test **/
         private ArrayList<Activite> activiteArrayList; // Array list qui contient les activite
         private RecyclerView mRecyclerViewActivite;
         private ActiviteListAdapter mAdapterActivite;
