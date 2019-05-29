@@ -17,27 +17,31 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="scroll_view_day">
+    <!--  Styles pour l'activité calendrier -->
+    <style name="add_day">
         <item name="android:gravity">center_vertical</item>
         <item name="android:background">@drawable/back_darkened</item>
         <item name="android:height">50dp</item>
         <item name="android:textSize">24dp</item>
         <item name="android:paddingLeft">10dp</item>
         <item name="android:paddingRight">10dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_marginTop">10dp</item>
         <item name="android:drawableRight">@drawable/ic_remove</item>
         <item name="android:drawableEnd">@drawable/ic_remove</item>
     </style>
 
-    <style name="scroll_view_inside">
+    <style name="add_day_inside_add">
+        <item name="android:drawableRight">@drawable/ic_add</item>
+        <item name="android:drawableEnd">@drawable/ic_add</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:paddingLeft">10dp</item>
         <item name="android:paddingRight">10dp</item>
+        <item name="android:layout_marginRight">15dp</item>
+        <item name="android:layout_marginLeft">15dp</item>
         <item name="android:background">@drawable/back_smooth</item>
         <item name="android:height">30dp</item>
     </style>
 
-    <style name="scroll_view_inside_add" parent="scroll_view_inside">
-        <item name="android:drawableRight">@drawable/ic_add</item>
-        <item name="android:drawableEnd">@drawable/ic_add</item>
-    </style>
 </resources>
