@@ -17,6 +17,7 @@ import android.widget.Toast;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         int texteCouleur = preferences.getInt("getTexteCouleur", R.style.LeNoir);
         setTheme(texteCouleur);
-        /**  **/
+        /** f **/
 
         setContentView(R.layout.activity_main);
 
@@ -49,9 +50,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setJour() {
-        DateFormat df = new SimpleDateFormat("d MMM");
+        DateFormat df = new SimpleDateFormat("d MMM", Locale.FRENCH);
         String date = df.format(Calendar.getInstance().getTime());
-        TextView tv = (TextView) findViewById(R.id.tv_atm_date);
+        TextView tv = findViewById(R.id.tv_atm_date);
         tv.setText(date);
 
     }
