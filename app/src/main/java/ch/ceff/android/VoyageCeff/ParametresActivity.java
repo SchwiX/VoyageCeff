@@ -33,7 +33,7 @@ public class ParametresActivity extends AppCompatActivity /*implements AdapterVi
         int background = preferences.getInt("getBackground",R.color.blanc);
         this.getWindow().getDecorView().setBackgroundResource(background);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(couleur)));
-        /**  text**/
+        /**  **/
     }
 
     String couleur;
