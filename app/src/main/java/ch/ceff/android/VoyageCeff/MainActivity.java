@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         int texteCouleur = preferences.getInt("getTexteCouleur", R.style.LeNoir);
         setTheme(texteCouleur);
-        /**  **/
+        /** f **/
 
         setContentView(R.layout.activity_main);
 
