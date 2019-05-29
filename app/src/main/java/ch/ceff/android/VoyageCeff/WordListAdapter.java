@@ -16,12 +16,14 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
     private LayoutInflater mInflater;
 
     class WordViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        final TextView wordItemView; //représente le composant qui affichera le mot dans le layout
+        final TextView titleItemView; //représente le composant qui affichera le mot dans le layout
+        final TextView containItemView;
         final WordListAdapter mAdapter; //représente l'adapter
 
         public WordViewHolder(View itemView, WordListAdapter adapter) {
             super(itemView);
-            wordItemView = itemView.findViewById(R.id.word);
+            titleItemView = itemView.findViewById(R.id.title);
+            containItemView = itemView.findViewById(R.id.contain);
             this.mAdapter = adapter;
         }
 
@@ -49,7 +51,8 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
     @Override
     public void onBindViewHolder(@NonNull WordListAdapter.WordViewHolder wordViewHolder, int i) {
         String mCurrent = mWordList.get(i);
-        wordViewHolder.wordItemView.setText(mCurrent);
+        wordViewHolder.titleItemView.setText(mCurrent);
+        wordViewHolder.containItemView.setText(mCurrent);
     }
 
     @Override

@@ -30,28 +30,6 @@ public class ReglementsActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private WordListAdapter mAdapter;
 
-    /*
-    private void showAddItemDialog(Context c) {
-        final EditText taskEditText = new EditText(c);
-        AlertDialog dialog = new AlertDialog.Builder(c)
-            .setTitle("Nouvelle règle")
-            .setMessage("Veuillez insérer votre nouvelle règle.")
-            .setView(taskEditText)
-            .setPositiveButton("Entrer", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    String task = String.valueOf(taskEditText.getText());
-                    int wordListSize = mWordList.size();
-                    mWordList.add(task);
-                    mRecyclerView.getAdapter().notifyItemInserted(wordListSize);
-                    mRecyclerView.smoothScrollToPosition(wordListSize);
-                }
-            })
-            .setNegativeButton("Annuler", null)
-            .create();
-        dialog.show();
-    }*/
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +40,6 @@ public class ReglementsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showDialog(0);
-                //showAddItemDialog(ReglementsActivity.this);
             }
         });
 
@@ -72,9 +49,10 @@ public class ReglementsActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void init(String text){
+    private void init(String title, String contain){
         int wordListSize = mWordList.size();
-        mWordList.add(text);
+        mWordList.add(title);
+        mWordList.add(contain);
         mRecyclerView.getAdapter().notifyItemInserted(wordListSize);
         mRecyclerView.smoothScrollToPosition(wordListSize);
     }
@@ -98,8 +76,7 @@ public class ReglementsActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int whichButton) {
                 String value = input.getText().toString().trim();
                 String value1 = input1.getText().toString().trim();
-                init(value);
-                init(value1);
+                init(value, value1);
             }
         });
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
