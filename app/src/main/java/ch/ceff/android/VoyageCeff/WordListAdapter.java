@@ -18,7 +18,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
     class WordViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final TextView titleItemView; //représente le composant qui affichera le mot dans le layout
         final TextView containItemView;
-        final WordListAdapter mAdapter; //représente l'adapter
+        final WordListAdapter mAdapter; //représente l'adapter hfhdtf
 
         public WordViewHolder(View itemView, WordListAdapter adapter) {
             super(itemView);
