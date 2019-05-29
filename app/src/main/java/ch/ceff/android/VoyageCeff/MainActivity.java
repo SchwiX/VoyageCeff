@@ -11,7 +11,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,6 +44,16 @@ public class MainActivity extends AppCompatActivity {
         this.getWindow().getDecorView().setBackgroundResource(background);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(couleur)));
         /** **/
+
+        setJour();
+    }
+
+    public void setJour() {
+        DateFormat df = new SimpleDateFormat("d MMM");
+        String date = df.format(Calendar.getInstance().getTime());
+        TextView tv = (TextView) findViewById(R.id.tv_atm_date);
+        tv.setText(date);
+
     }
 
     @Override
