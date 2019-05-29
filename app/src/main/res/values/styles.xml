@@ -8,6 +8,20 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="LeBlanc" parent="ThemeOverlay.AppCompat.Dark">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="LeNoir" parent="ThemeOverlay.AppCompat.Light">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -23,6 +37,20 @@
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
     </style>
+    <!--  Styles pour l'activité calendrier -->
+    <style name="add_day">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@drawable/back_darkened</item>
+        <item name="android:height">50dp</item>
+        <item name="android:textSize">24dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:drawableRight">@drawable/ic_remove</item>
+        <item name="android:drawableEnd">@drawable/ic_remove</item>
+    </style>
 
     <style name="word_contain">
         <item name="android:layout_width">match_parent</item>
@@ -30,5 +58,17 @@
         <item name="android:textSize">20sp</item>
     </style>
 
+
+    <style name="add_day_inside_add">
+        <item name="android:drawableRight">@drawable/ic_add</item>
+        <item name="android:drawableEnd">@drawable/ic_add</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:layout_marginRight">15dp</item>
+        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:background">@drawable/back_smooth</item>
+        <item name="android:height">30dp</item>
+    </style>
 
 </resources>
