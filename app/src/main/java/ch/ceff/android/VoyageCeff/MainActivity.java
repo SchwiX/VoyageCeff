@@ -20,16 +20,25 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /** PART 1 **/
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int texteCouleur = preferences.getInt("getTexteCouleur", R.style.LeNoir);
+        setTheme(texteCouleur);
+        /**  **/
+
         setContentView(R.layout.activity_main);
+
         // Définir le composant ToolBar en tant que barre d'appli
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        /** PART 2 **/
         String couleur = preferences.getString("getCouleur", "#008577");
-        int background = preferences.getInt("getBackground",0);
+        int background = preferences.getInt("getBackground",R.color.blanc);
         this.getWindow().getDecorView().setBackgroundResource(background);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(couleur)));
+        /** **/
     }
 
     @Override

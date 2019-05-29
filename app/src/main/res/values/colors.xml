@@ -8,4 +8,5 @@
     <color name="rouge">#8B0000</color>
     <color name="jaune">#808000</color>
     <color name="blanc">#FFFFFF</color>
+    <color name="noir">#000000</color>
 </resources>
