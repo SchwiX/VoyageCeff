@@ -2,6 +2,7 @@ package ch.ceff.android.VoyageCeff;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
