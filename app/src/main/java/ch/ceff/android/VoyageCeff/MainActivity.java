@@ -1,12 +1,17 @@
 package ch.ceff.android.VoyageCeff;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,10 +20,25 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /** PART 1 **/
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int texteCouleur = preferences.getInt("getTexteCouleur", R.style.LeNoir);
+        setTheme(texteCouleur);
+        /**  **/
+
         setContentView(R.layout.activity_main);
+
         // Définir le composant ToolBar en tant que barre d'appli
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        /** PART 2 **/
+        String couleur = preferences.getString("getCouleur", "#008577");
+        int background = preferences.getInt("getBackground",R.color.blanc);
+        this.getWindow().getDecorView().setBackgroundResource(background);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(couleur)));
+        /** **/
     }
 
     @Override

@@ -6,4 +6,12 @@
     <string name="label_reglements">Règlements</string>
     <string name="label_parametres">Paramètres</string>
     <string name="label_ajouter_jour">Ajouter un jour</string>
+    <string name="couleur_du_menu">Couleur du menu</string>
+    <string name="sauvegarder">Sauvegarder</string>
+    <string name="image_de_fond">Image de fond</string>
+    <string name="bckgr_1">BCKGR_1</string>
+    <string name="bckgr_2">BCKGR_2</string>
+    <string name="bckgr_3">BCKGR_3</string>
+    <string name="bckgr_no">BCKGR_NO</string>
+    <string name="couleur_du_texte">Couleur du texte</string>
 </resources>
