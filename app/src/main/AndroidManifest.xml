@@ -9,12 +9,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CalendrierAjouterJourActivity"
-            android:label="@string/label_ajouter_jour"
-            android:parentActivityName=".MainActivity">
+        <activity android:name=".TimePickerActivity"
+            android:label="@string/label_ajout_activite"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.AppCompat.Dialog"
+            android:excludeFromRecents="true"
+            >
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".MainActivity"/>
         </activity>
 
+        <activity
+            android:name=".CalendrierAjouterJourActivity"
+            android:label="@string/label_ajouter_jour"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
         <activity
             android:name=".ParametresActivity"
             android:label="@string/label_parametres"
@@ -57,7 +68,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>
