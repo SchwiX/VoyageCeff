@@ -54,7 +54,7 @@ public class CalendrierActivity extends AppCompatActivity implements DayListAdap
         int background = preferences.getInt("getBackground",R.color.blanc);
         this.getWindow().getDecorView().setBackgroundResource(background);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(couleur)));
-        /** **/
+        /** test **/
         context = this;
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener(){
