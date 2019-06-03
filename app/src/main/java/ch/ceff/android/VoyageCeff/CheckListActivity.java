@@ -41,12 +41,13 @@ public class CheckListActivity extends AppCompatActivity {
         /**  **/
 
         setContentView(R.layout.activity_check_list);
-        /** **/
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(couleur)));
-        this.getWindow().getDecorView().setBackgroundResource(background);
-        int background = preferences.getInt("getBackground",R.color.blanc);
-        String couleur = preferences.getString("getCouleur", "#008577");
+
         /** PART 2 **/
+        String couleur = preferences.getString("getCouleur", "#008577");
+        int background = preferences.getInt("getBackground",R.color.blanc);
+        this.getWindow().getDecorView().setBackgroundResource(background);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(couleur)));
+        /** **/
 
 
         init();
