@@ -5,26 +5,24 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-@Database(entities = {LocalDateParceable.class}, version = 1)
+@Database(entities = {LocalDateParceable.class, Activite.class}, version = 2)
 public abstract class AppDatabase extends RoomDatabase {
-
     private static AppDatabase INSTANCE;
 
-    public abstract LocalDateParceable userDao();
+    public abstract LocalDateParceableDao localDateParceableDao();
+    public abstract ActiviteDao activiteDao();
 
-    public static AppDatabase getAppDatabase(Context context) {
+    static AppDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
-            INSTANCE =
-                    Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "local-database")
-                            // allow queries on the main thread.
-                            // Don't do this on a real app! See PersistenceBasicSample for an example.
-                            .allowMainThreadQueries()
-                            .build();
+            synchronized (AppDatabase.class) {
+                if (INSTANCE == null) {
+                    INSTANCE =
+                            Room.databaseBuilder(context.getApplicationContext(),
+                                    AppDatabase.class,
+                                    "localdate_database_5").build();
+                }
+            }
         }
         return INSTANCE;
-    }
-
-    public static void destroyInstance() {
-        INSTANCE = null;
     }
 }
