@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordViewHolder>{
+public class ReglementListAdapter extends RecyclerView.Adapter<ReglementListAdapter.WordViewHolder>{
 
     private final ArrayList<String> mWordList;
     private LayoutInflater mInflater;
@@ -18,9 +18,9 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
     class WordViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final TextView titleItemView; //représente le composant qui affichera le mot dans le layout
         final TextView containItemView;
-        final WordListAdapter mAdapter; //représente l'adapter hfhdtf
+        final ReglementListAdapter mAdapter; //représente l'adapter hfhdtf
 
-        public WordViewHolder(View itemView, WordListAdapter adapter) {
+        public WordViewHolder(View itemView, ReglementListAdapter adapter) {
             super(itemView);
             titleItemView = itemView.findViewById(R.id.title);
             containItemView = itemView.findViewById(R.id.contain);
@@ -36,21 +36,23 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         }
     }
 
-    public WordListAdapter(Context context, ArrayList<String> wordList) {
+    public ReglementListAdapter(Context context, ArrayList<String> wordList) {
         mInflater = LayoutInflater.from(context);
         this.mWordList = wordList;
     }
 
     @NonNull
     @Override
-    public WordListAdapter.WordViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View mItemView = mInflater.inflate(R.layout.wordlist_item, viewGroup, false);
+    public ReglementListAdapter.WordViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        //Layout custom pour la pop-up
+        View mItemView = mInflater.inflate(R.layout.reglement_list_item, viewGroup, false);
         return new WordViewHolder(mItemView, this);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull WordListAdapter.WordViewHolder wordViewHolder, int i) {
+    public void onBindViewHolder(@NonNull ReglementListAdapter.WordViewHolder wordViewHolder, int i) {
         String mCurrent = mWordList.get(i);
+        //TODO : Regarder comment ça marche ?
         wordViewHolder.titleItemView.setText(mCurrent);
         wordViewHolder.containItemView.setText(mCurrent);
     }

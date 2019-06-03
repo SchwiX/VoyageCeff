@@ -23,7 +23,7 @@ public class ReglementsActivity extends AppCompatActivity {
     private static final String TAG = ReglementsActivity.class.getSimpleName();
     private ArrayList<String> mWordList = new ArrayList<>();
     private RecyclerView mRecyclerView;
-    private WordListAdapter mAdapter;
+    private ReglementListAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,46 +55,54 @@ public class ReglementsActivity extends AppCompatActivity {
         });
 
         mRecyclerView = findViewById(R.id.id_recyclerview_reglements);
-        mAdapter = new WordListAdapter(this, mWordList);
+        mAdapter = new ReglementListAdapter(this, mWordList);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
-//TODO: LOTS
-    private void init(String title, String contain){
+
+    //TODO : Rename Variables
+    //TODO : FIXER TOUTE CETTE CHOSE, voir aussi -> ReglementListAdapter
+    private void init(String title, String content){
         int wordListSize = mWordList.size();
+        //TODO : Change add ? poour pas qu'il y en ai 2 chaque fois
         mWordList.add(title);
-        mWordList.add(contain);
+        mWordList.add(content);
+        // TILL HERE
         mRecyclerView.getAdapter().notifyItemInserted(wordListSize);
         mRecyclerView.smoothScrollToPosition(wordListSize);
     }
 
-    protected Dialog onCreateDialog(int id)
-    {
-        final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+    //TODO : Sort and add comments
+    protected Dialog onCreateDialog(int id){
 
-        LinearLayout lila1= new LinearLayout(this);
-        lila1.setOrientation(LinearLayout.VERTICAL);
-        final EditText input = new EditText(this);
-        final EditText input1 = new EditText(this);
-        lila1.addView(input);
-        lila1.addView(input1);
-        alert.setView(lila1);
+        final AlertDialog.Builder DialogBox = new AlertDialog.Builder(this);
 
-        //alert.setIcon(R.drawable.icon);
-        alert.setTitle("Login");
+        //Layout pour avoir 2 input
+        LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        final EditText title = new EditText(this);
+        final EditText content = new EditText(this);
+        linearLayout.addView(title);
+        linearLayout.addView(content);
+        DialogBox.setView(linearLayout);
 
-        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        //Titre de la pop-up
+        DialogBox.setTitle("Ajouter un règlement");
+
+        //Bouton "ok" pour la boite de dialogue
+        DialogBox.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                String value = input.getText().toString().trim();
-                String value1 = input1.getText().toString().trim();
-                init(value, value1);
-            }
+                //TODO : Gestion de la création
+                String titre = title.getText().toString().trim();
+                String contenu = content.getText().toString().trim();
+                init(titre, contenu);
+        }
         });
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        DialogBox.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 dialog.cancel();
             }
         });
-        return alert.create();
+        return DialogBox.create();
     }
 }
