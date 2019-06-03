@@ -56,7 +56,6 @@ public class CheckListActivity extends AppCompatActivity {
         init();
 
 
-
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,16 +83,24 @@ public class CheckListActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        ImageView deleteItemImage = findViewById(R.id.button);
         switch (item.getItemId()) {
             case R.id.check_list_menu:
                 //TODO: Edit -> Shows the [X] buttons
                 Log.d(TAG, "Hide/Show delete buttons");
 
-                if(deleteItemImage.getVisibility() == View.INVISIBLE){
-                    
-                }else if(deleteItemImage.getVisibility() == View.VISIBLE){
-                }
+                /*
+                if(mRecyclerView.findViewById(R.id.button).getVisibility() == View.INVISIBLE){
+                    mRecyclerView.findViewById(R.id.button).setVisibility(View.VISIBLE);
+                }else if(mRecyclerView.findViewById(R.id.button).getVisibility() == View.VISIBLE){
+                    mRecyclerView.findViewById(R.id.button).setVisibility(View.INVISIBLE);
+                }*/
+
+                /**
+                 * WIP:
+                 * 1. Gerer tout ici -> Fail : marque que sure le premier
+                 * 2. Pointer sur checkListAdapter -> Fail : Can't access ViewHolder
+                 * 3. Give up ... ?
+                 **/
 
                 return true;
 
@@ -105,8 +112,8 @@ public class CheckListActivity extends AppCompatActivity {
     private void showAddItemDialog(Context c) {
         //TODO : Cleaner dialog box ! (Try use checklist_dialog_box.xml)
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
-        builder.setTitle("Add an item");
-        builder.setMessage("Name :");
+        builder.setTitle("Ajout d'une tâche");
+        builder.setMessage("Titre de la tâche");
 
         // Set up the input
         final EditText input = new EditText(c);
