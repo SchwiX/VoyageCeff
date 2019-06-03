@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 public class CheckListActivity extends AppCompatActivity {
 
+    // Fresh Start
     private static final String TAG = CheckListActivity.class.getSimpleName();
     private ArrayList<String> mCheckList = new ArrayList<>();
     private RecyclerView mRecyclerView;
