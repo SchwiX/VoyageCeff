@@ -138,7 +138,6 @@ public class DayListAdapter extends RecyclerView.Adapter<DayListAdapter.DayViewH
             //Définir un gestionnaire de layout par défaut pour RecyclerView
             mRecyclerViewActivite.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
 
-            /*
             ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
                 @Override
                 public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
@@ -155,7 +154,6 @@ public class DayListAdapter extends RecyclerView.Adapter<DayListAdapter.DayViewH
             });
 
             helper.attachToRecyclerView(mRecyclerViewActivite);
-            */
         }
 
         public void setLiveDataObserver(String dayId){

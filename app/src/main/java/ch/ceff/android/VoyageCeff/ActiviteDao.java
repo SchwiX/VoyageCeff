@@ -11,7 +11,7 @@ import java.util.List;
 @Dao
 public interface ActiviteDao {
 
-    @Query("SELECT * FROM tb_activites WHERE tb_activites.idDay = :dayId") // Selectionne seulement les activite du jour
+    @Query("SELECT * FROM tb_activites WHERE tb_activites.idDay = :dayId ORDER BY tb_activites.startHour, tb_activites.startMinute") // Selectionne seulement les activite du jour
     LiveData<List<Activite>> getAllActivitesFromIdDay(String dayId);
 
     @Insert
