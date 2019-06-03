@@ -34,10 +34,8 @@ public class ActiviteViewModel extends AndroidViewModel {
     }
 
     LiveData<List<Activite>> getAllActivites(){
-        if(mAllActivites == null){
-            this.mAllActivites = activiteDao.getAllActivitesFromIdDay(this.dayId); // Retourne toutes les activites du jour depuis la base
-            Log.d(TAG, "Id du jour " + dayId);
-        }
+        this.mAllActivites = activiteDao.getAllActivitesFromIdDay(this.dayId); // Retourne toutes les activites du jour depuis la base
+        Log.d(TAG, "Id du jour " + dayId);
         return mAllActivites;
     }
 
