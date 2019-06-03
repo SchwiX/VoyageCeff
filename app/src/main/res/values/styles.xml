@@ -57,14 +57,15 @@
     </style>
 
     <style name="add_day_inside_add">
-        <item name="android:drawableRight">@drawable/ic_add</item>
-        <item name="android:drawableEnd">@drawable/ic_add</item>
+        <item name="android:drawableTop">@drawable/ic_add</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:paddingLeft">10dp</item>
         <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
         <item name="android:layout_marginRight">15dp</item>
         <item name="android:layout_marginLeft">15dp</item>
-        <item name="android:background">@drawable/back_smooth</item>
+        <item name="android:background">@drawable/back_smooth2</item>
         <item name="android:height">30dp</item>
     </style>
 
