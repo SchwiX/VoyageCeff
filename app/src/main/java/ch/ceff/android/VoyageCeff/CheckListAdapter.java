@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -15,8 +16,7 @@ import java.util.ArrayList;
 class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.WordViewHolder>{
 
     private static final String TAG = CheckListAdapter.class.getSimpleName();
-    //private ArrayList<CheckListClass> myItems;
-    private final ArrayList<String> mWordList;
+    private ArrayList<CheckListClass> myItems = new ArrayList<>();
     private LayoutInflater mInflater;
 
     class WordViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -57,15 +57,14 @@ class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.WordViewHol
     }
 
     private void removeAt(int adapterPosition) {
-        mWordList.remove(adapterPosition);
+        myItems.remove(adapterPosition);
         notifyItemRemoved(adapterPosition);
-        notifyItemRangeChanged(adapterPosition, mWordList.size());
+        notifyItemRangeChanged(adapterPosition, myItems.size());
     }
 
     public CheckListAdapter(Context context, ArrayList<String> wordList) {
         mInflater = LayoutInflater.from(context);
 
-        /*
         ArrayList<CheckListClass> tempItemMake = new ArrayList<>();
 
         for ( String str : wordList){
@@ -73,8 +72,6 @@ class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.WordViewHol
         }
 
         this.myItems = tempItemMake;
-        */
-        this.mWordList = wordList;
     }
 
     @NonNull
@@ -86,13 +83,7 @@ class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.WordViewHol
 
     @Override
     public void onBindViewHolder(@NonNull CheckListAdapter.WordViewHolder wordViewHolder, int i) {
-        String mCurrent = mWordList.get(i);
-        wordViewHolder.wordItemView.setText(mCurrent);
-
-
-        /*
         final CheckListClass mCurrent = myItems.get(i);
-
         wordViewHolder.wordItemView.setText(mCurrent.getTitre());
 
         //in some cases, it will prevent unwanted situations
@@ -108,12 +99,12 @@ class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.WordViewHol
                 mCurrent.setChecked(isChecked);
             }
         });
-        */
+
     }
 
     @Override
     public int getItemCount() {
-        return mWordList.size();
+        return myItems.size();
     }
 }
 
