@@ -18,7 +18,7 @@ public class ReglementListAdapter extends RecyclerView.Adapter<ReglementListAdap
     class WordViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final TextView titleItemView; //représente le composant qui affichera le mot dans le layout
         final TextView containItemView;
-        final ReglementListAdapter mAdapter; //représente l'adapter hfhdtf
+        final ReglementListAdapter mAdapter; //représente l'adapter
 
         public WordViewHolder(View itemView, ReglementListAdapter adapter) {
             super(itemView);
@@ -52,9 +52,10 @@ public class ReglementListAdapter extends RecyclerView.Adapter<ReglementListAdap
     @Override
     public void onBindViewHolder(@NonNull ReglementListAdapter.WordViewHolder wordViewHolder, int i) {
         String mCurrent = mWordList.get(i);
+        String mCurrent2 = mWordList.get(i);
         //TODO : Regarder comment ça marche ?
         wordViewHolder.titleItemView.setText(mCurrent);
-        wordViewHolder.containItemView.setText(mCurrent);
+        wordViewHolder.containItemView.setText(mCurrent2);
     }
 
     @Override

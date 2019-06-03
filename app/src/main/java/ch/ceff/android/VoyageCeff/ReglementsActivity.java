@@ -28,7 +28,7 @@ public class ReglementsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_reglements);
+        //setContentView(R.layout.activity_reglements);
 
         /** PART 1 **/
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -65,7 +65,7 @@ public class ReglementsActivity extends AppCompatActivity {
     private void init(String title, String content){
         int wordListSize = mWordList.size();
         //TODO : Change add ? poour pas qu'il y en ai 2 chaque fois
-        mWordList.add(title);
+       // mWordList.add(title);
         mWordList.add(content);
         // TILL HERE
         mRecyclerView.getAdapter().notifyItemInserted(wordListSize);
