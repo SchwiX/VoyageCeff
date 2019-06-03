@@ -22,8 +22,6 @@
     <string name="label_ajout_de_activite">Ajout de l\'activité</string>
     <string name="label_titre_activite">Titre</string>
     <string name="label_visite_du_temple">Visite du temple</string>
-    <string name="habits">Habits</string>
-    <string name="chargeur">Chargeur</string>
     <string name="check_lists">Check Lists</string>
-    <string name="hide">Hide</string>
+    <string name="edit_checkbox">Edit</string>
 </resources>

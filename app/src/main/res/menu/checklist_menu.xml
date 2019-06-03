@@ -3,6 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/check_list_menu"
-        android:title="@string/hide"
+        android:title="@string/edit_checkbox"
         app:showAsAction="always" />
 </menu>

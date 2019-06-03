@@ -18,12 +18,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 
 public class CheckListActivity extends AppCompatActivity {
 
-    // Fresh Start
+    // Variables
     private static final String TAG = CheckListActivity.class.getSimpleName();
     private ArrayList<String> mCheckList = new ArrayList<>();
     private RecyclerView mRecyclerView;
@@ -34,6 +35,7 @@ public class CheckListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //app design and style
         /** PART 1 **/
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         //int texteCouleur = preferences.getInt("getTexteCouleur", R.style.AppTheme);
@@ -52,6 +54,8 @@ public class CheckListActivity extends AppCompatActivity {
 
 
         init();
+
+
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -80,10 +84,17 @@ public class CheckListActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        ImageView deleteItemImage = findViewById(R.id.button);
         switch (item.getItemId()) {
             case R.id.check_list_menu:
-                //TODO: Hide checked checkboxes when database implement
-                Log.d(TAG, "Hide checked");
+                //TODO: Edit -> Shows the [X] buttons
+                Log.d(TAG, "Hide/Show delete buttons");
+
+                if(deleteItemImage.getVisibility() == View.INVISIBLE){
+                    
+                }else if(deleteItemImage.getVisibility() == View.VISIBLE){
+                }
+
                 return true;
 
             default:
