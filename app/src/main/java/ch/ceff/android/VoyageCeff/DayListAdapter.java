@@ -54,25 +54,12 @@ public class DayListAdapter extends RecyclerView.Adapter<DayListAdapter.DayViewH
     public void onBindViewHolder(final DayViewHolder dayViewHolder, int i) {
         // Objet actuellement cliqué
         final LocalDateParceable currentDate = dayList.get(i);
-        dayViewHolder.getDayView().setText(currentDate.getLocalDate().format(DateTimeFormatter.ofPattern("d EEEE", Locale.FRANCE))); // format --> ex 21 Lundi
+        dayViewHolder.getDayView().setText(currentDate.getLocalDate().format(DateTimeFormatter.ofPattern("EEEE d MMMM", Locale.FRANCE))); // format --> ex 21 Lundi
 
         // Set le listener sur la view --> layout avec tout dedans du holder
         dayViewHolder.getItemView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { // Quand on clic sur un jour
-                String dayId = currentDate.getId();
-                dayViewHolder.getActiviteViewModel().setDayId(dayId);
-
-                if(!dayViewHolder.observerSet){ // Permet de set l'observeur une seul fois
-                    dayViewHolder.getActiviteViewModel().getAllActivites().observe((LifecycleOwner) context, new Observer<List<Activite>>() {
-                        @Override
-                        public void onChanged(@Nullable List<Activite> activites) {
-                            dayViewHolder.getmAdapterActivite().setActiviteList((ArrayList<Activite>) activites);
-                        }
-                    });
-                    dayViewHolder.observerSet = true;
-                }
-
                 // Appel la méthode dans la classe CalendrierActivity
                 listener.dayListClick(dayViewHolder, currentDate);
             }
@@ -80,7 +67,7 @@ public class DayListAdapter extends RecyclerView.Adapter<DayListAdapter.DayViewH
 
         dayViewHolder.getDayInsideAdd().setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) { // Quand on ajoute une activite
                 listener.addActivityInsideDay();
             }
         });
@@ -151,6 +138,7 @@ public class DayListAdapter extends RecyclerView.Adapter<DayListAdapter.DayViewH
             //Définir un gestionnaire de layout par défaut pour RecyclerView
             mRecyclerViewActivite.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
 
+            /*
             ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
                 @Override
                 public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
@@ -167,6 +155,20 @@ public class DayListAdapter extends RecyclerView.Adapter<DayListAdapter.DayViewH
             });
 
             helper.attachToRecyclerView(mRecyclerViewActivite);
+            */
+        }
+
+        public void setLiveDataObserver(String dayId){
+            if(!observerSet){ // Permet de set l'observeur une seul fois
+                getActiviteViewModel().setDayId(dayId); // Set l'id du jour de l'activite au view model
+                getActiviteViewModel().getAllActivites().observe((LifecycleOwner) context, new Observer<List<Activite>>() {
+                    @Override
+                    public void onChanged(@Nullable List<Activite> activites) {
+                        getmAdapterActivite().setActiviteList((ArrayList<Activite>) activites);
+                    }
+                });
+                observerSet = true;
+            }
         }
 
         public ArrayList<Activite> getActiviteArrayList() {

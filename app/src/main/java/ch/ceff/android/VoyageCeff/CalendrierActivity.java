@@ -140,7 +140,8 @@ public class CalendrierActivity extends AppCompatActivity implements DayListAdap
                 sortActivityArray(dayViewHolderOpen.getActiviteArrayList());
                 dayViewHolderOpen.getmRecyclerViewActivite().setVisibility(View.VISIBLE);
 
-                ajoutActivite.setIdDay(currentDate.getId());
+                ajoutActivite.setIdDay(currentDate.getId()); // Ajoute l'id du jour a l'activite
+
                 dayViewHolderOpen.getActiviteViewModel().insert(ajoutActivite); // Ajoute l'activite dans la base
 
                 dayViewHolderOpen.getmAdapterActivite().notifyDataSetChanged(); // Notifie que on a ajouté une activité
@@ -168,10 +169,13 @@ public class CalendrierActivity extends AppCompatActivity implements DayListAdap
         if(dayViewHolderOpen != null){ // On a déja ouvert un jour
             hideChildrenSinceSecondView(dayViewHolderOpen); // Ferme le jour
         }
-        dayViewHolderOpen = dayViewHolder; // Init le jour actuellement ouvert
-        this.currentDate = currentDate;
+        this.dayViewHolderOpen = dayViewHolder; // Init le jour actuellement ouvert
+        Log.d(TAG, "Mets a jour le dayviewholder actuel");
+        this.currentDate = currentDate; // Met a jour la date actuelle
+        Log.d(TAG, "Mets a jour la date actuelle");
         dayViewHolderOpen.getDayInsideAdd().setVisibility(View.VISIBLE); // Affiiche la flèche pour ajouter une activité
         dayViewHolderOpen.getmRecyclerViewActivite().setVisibility(View.VISIBLE);
+        dayViewHolderOpen.setLiveDataObserver(currentDate.getId()); // Met l'observeur a jour sur le live data de la liste d'activites si pas encore fait
     }
 
     // On redéfinit la méthode de DayListAdapter.DayListClickListener
