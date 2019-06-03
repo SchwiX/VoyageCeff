@@ -59,7 +59,7 @@ public class ReglementsActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
-
+//TODO: LOTS
     private void init(String title, String contain){
         int wordListSize = mWordList.size();
         mWordList.add(title);
