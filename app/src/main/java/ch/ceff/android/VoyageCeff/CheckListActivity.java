@@ -44,13 +44,13 @@ public class CheckListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "I'm trying to add something");
-                //TODO : Can delete after insert ! (Maybe add X button)
+                //Log.d(TAG, "I'm trying to add something");
                 showAddItemDialog(CheckListActivity.this);
             }
         });
     }
 
+    //TODO : Change to card view boxes
     private void init() {
         mRecyclerView = findViewById(R.id.check_list_recycler_view);
         mAdapter = new CheckListAdapter(this, mCheckList);
@@ -69,7 +69,7 @@ public class CheckListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.check_list_menu:
-                //TODO: Hide checked checkboxes
+                //TODO: Hide checked checkboxes when database implement
                 Log.d(TAG, "Hide checked");
                 return true;
 
@@ -86,18 +86,8 @@ public class CheckListActivity extends AppCompatActivity {
 
         // Set up the input
         final EditText input = new EditText(c);
-        final EditText input2 = new EditText(c);
         // Specify the type of input expected
         input.setInputType(InputType.TYPE_CLASS_TEXT);
-
-        /*
-        LinearLayout lila1= new LinearLayout(this);
-        lila1.setOrientation(LinearLayout.VERTICAL);
-
-        lila1.addView(input);
-        lila1.addView(input2);
-        builder.setView(lila1);
-        */
 
         builder.setView(input);
 
