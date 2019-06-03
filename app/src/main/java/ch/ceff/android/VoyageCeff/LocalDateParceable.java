@@ -2,9 +2,11 @@ package ch.ceff.android.VoyageCeff;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -13,8 +15,9 @@ import java.util.UUID;
 public class LocalDateParceable implements Parcelable {
 
     @PrimaryKey
-    @ColumnInfo(name = "userid")
-    private String mId;
+    @NonNull
+    @ColumnInfo(name = "id")
+    private String id;
 
     @ColumnInfo(name = "dateYear")
     private int dateYear;
@@ -25,11 +28,11 @@ public class LocalDateParceable implements Parcelable {
     @ColumnInfo(name = "dateDay")
     private int dateDay;
 
-    @ColumnInfo(name = "localDate")
+    @Ignore
     private LocalDate localDate;
 
     public LocalDateParceable(int dateYear, int dateMonth, int dateDay) {
-        mId = UUID.randomUUID().toString();
+        id = UUID.randomUUID().toString();
         this.dateYear = dateYear;
         this.dateMonth = dateMonth;
         this.dateDay = dateDay;
@@ -37,7 +40,7 @@ public class LocalDateParceable implements Parcelable {
     }
 
     protected LocalDateParceable(Parcel in) {
-        mId = in.readString();
+        id = in.readString();
         dateYear = in.readInt();
         dateMonth = in.readInt();
         dateDay = in.readInt();
@@ -68,9 +71,16 @@ public class LocalDateParceable implements Parcelable {
         this.dateDay = dateDay;
     }
 
-
     public void setLocalDate(LocalDate localDate) {
         this.localDate = localDate;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public LocalDate getLocalDate() {
@@ -94,7 +104,7 @@ public class LocalDateParceable implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mId);
+        dest.writeString(id);
         dest.writeInt(dateYear);
         dest.writeInt(dateMonth);
         dest.writeInt(dateDay);

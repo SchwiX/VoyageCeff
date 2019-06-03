@@ -1,5 +1,6 @@
 package ch.ceff.android.VoyageCeff;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -9,17 +10,12 @@ import java.util.List;
 
 @Dao
 public interface LocalDateParceableDao {
+
     @Query("SELECT * FROM tb_dates")
-    List<LocalDateParceable> getAll();
-
-    @Query("SELECT * FROM tb_dates where dateYear LIKE  :dateYear AND dateMonth LIKE :dateMonth AND dateDay LIKE :dateDay")
-    LocalDateParceable findByName(int dateYear, int dateMonth, int dateDay);
-
-    @Query("SELECT COUNT(*) from tb_dates")
-    int countUsers();
+    LiveData<List<LocalDateParceable>> getAllLocalDatesParceable();
 
     @Insert
-    void insertAll(LocalDateParceable... localDateParceables);
+    void insert(LocalDateParceable localDateParceables);
 
     @Delete
     void delete(LocalDateParceable localDateParceable);
