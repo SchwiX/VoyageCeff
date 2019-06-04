@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class ActiviteListAdapter extends RecyclerView.Adapter<ActiviteListAdapter.ActiviteViewHolder> {
-    private final ArrayList<Activite> activiteList; // Lien sur la source de données
+    private ArrayList<Activite> activiteList; // Lien sur la source de données
     private LayoutInflater mInflater; // LayoutInflater pour utiliser le contenu du fichier xml wordlist_item
 
     // Le constructeur permet de mettre à jour la source de données
@@ -42,6 +42,16 @@ public class ActiviteListAdapter extends RecyclerView.Adapter<ActiviteListAdapte
     public int getItemCount() {
         // Retourne le nombre d'éléments dans la lsite
         return activiteList.size();
+    }
+
+
+    public void setActiviteList(ArrayList<Activite> activites){
+        activiteList = activites;
+        notifyDataSetChanged();
+    }
+
+    public Activite getActiviteAtPosition(int position) {
+        return activiteList.get(position);
     }
 
     /*

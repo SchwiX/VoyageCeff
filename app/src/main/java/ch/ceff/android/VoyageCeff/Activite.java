@@ -1,19 +1,55 @@
 package ch.ceff.android.VoyageCeff;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import java.time.LocalTime;
+import java.util.UUID;
 
+@Entity(tableName = "tb_activites")
 public class Activite implements Parcelable {
-    private int startHour, startMinute, endHour, endMinute;
+    @PrimaryKey
+    @NonNull
+    @ColumnInfo(name = "id")
+    private String id;
+
+    @ColumnInfo(name = "idDay")
+    private String idDay;
+
+    @ColumnInfo(name = "startHour")
+    private int startHour;
+
+    @ColumnInfo(name = "startMinute")
+    private int startMinute;
+
+    @ColumnInfo(name = "endHour")
+    private int endHour;
+
+    @ColumnInfo(name = "endMinute")
+    private int endMinute;
+
+    @ColumnInfo(name = "titreActivite")
     private String titreActivite;
+
+    @ColumnInfo(name = "startTimeStr")
     private String startTimeStr;
+
+    @ColumnInfo(name = "endTimeStr")
     private String endTimeStr;
+
+    @Ignore
     private LocalTime startTime;
+
+    @Ignore
     private LocalTime endTime;
 
     public Activite(int startHour, int startMinute, int endHour, int endMinute, String titreActivite) {
+        id = UUID.randomUUID().toString();
         this.startHour = startHour;
         this.startMinute = startMinute;
         this.endHour = endHour;
@@ -26,6 +62,8 @@ public class Activite implements Parcelable {
     }
 
     protected Activite(Parcel in) {
+        id = in.readString();
+        idDay = in.readString();
         startHour = in.readInt();
         startMinute = in.readInt();
         endHour = in.readInt();
@@ -119,6 +157,24 @@ public class Activite implements Parcelable {
         this.endTime = endTime;
     }
 
+    public String getIdDay() {
+        return idDay;
+    }
+
+    public void setIdDay(String idDay) {
+        this.idDay = idDay;
+    }
+
+    @NonNull
+    public String getId() {
+        return id;
+    }
+
+    public void setId(@NonNull String id) {
+        this.id = id;
+    }
+
+
     @Override
     public String toString() {
         return titreActivite + " de " + startTimeStr + " à " + endTimeStr;
@@ -131,6 +187,8 @@ public class Activite implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(idDay);
         dest.writeInt(startHour);
         dest.writeInt(startMinute);
         dest.writeInt(endHour);

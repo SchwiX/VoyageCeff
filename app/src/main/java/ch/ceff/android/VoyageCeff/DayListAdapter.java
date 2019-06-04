@@ -1,9 +1,15 @@
 package ch.ceff.android.VoyageCeff;
 
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,16 +18,18 @@ import android.widget.TextView;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class DayListAdapter extends RecyclerView.Adapter<DayListAdapter.DayViewHolder>{
-    private final ArrayList<LocalDateParceable> dayList; // Lien sur la source de données
+    private ArrayList<LocalDateParceable> dayList; // Lien sur la source de données
     private LayoutInflater mInflater; // LayoutInflater pour utiliser le contenu du fichier xml wordlist_item
     private DayListClickListener listener;
+    private Context context;
 
     // Interface avec une méthode qui demande la date
     public interface DayListClickListener {
-        void dayListClick(DayViewHolder dayViewHolder);
+        void dayListClick(DayViewHolder dayViewHolder, LocalDateParceable currentDate);
         void addActivityInsideDay();
     }
 
@@ -30,6 +38,7 @@ public class DayListAdapter extends RecyclerView.Adapter<DayListAdapter.DayViewH
         mInflater = LayoutInflater.from(context); // LayoutInflater pour utiliser le contenu du fichier xml
         this.dayList = dayList; //mets a jour la source de données
         this.listener = listener;
+        this.context = context;
     }
 
     @NonNull
@@ -45,27 +54,42 @@ public class DayListAdapter extends RecyclerView.Adapter<DayListAdapter.DayViewH
     public void onBindViewHolder(final DayViewHolder dayViewHolder, int i) {
         // Objet actuellement cliqué
         final LocalDateParceable currentDate = dayList.get(i);
-        dayViewHolder.getDayView().setText(currentDate.getLocalDate().format(DateTimeFormatter.ofPattern("d EEEE", Locale.FRANCE))); // format --> ex 21 Lundi
+        dayViewHolder.getDayView().setText(currentDate.getLocalDate().format(DateTimeFormatter.ofPattern("EEEE d MMMM", Locale.FRANCE))); // format --> ex 21 Lundi
 
         // Set le listener sur la view --> layout avec tout dedans du holder
         dayViewHolder.getItemView().setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                listener.dayListClick(dayViewHolder);
+            public void onClick(View v) { // Quand on clic sur un jour
+                // Appel la méthode dans la classe CalendrierActivity
+                listener.dayListClick(dayViewHolder, currentDate);
             }
         });
+
         dayViewHolder.getDayInsideAdd().setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) { // Quand on ajoute une activite
                 listener.addActivityInsideDay();
             }
         });
     }
 
+    public LocalDateParceable getLocalDateAtPosition(int position){
+        return dayList.get(position);
+    }
+
     @Override
     public int getItemCount() {
         // Retourne le nombre d'éléments dans la lsite
-        return dayList.size();
+        if(dayList != null){
+            return dayList.size();
+        }else{
+            return 0;
+        }
+    }
+
+    public void setDayList(ArrayList<LocalDateParceable> localDateParceables){
+        dayList = localDateParceables;
+        notifyDataSetChanged();
     }
 
     /*
@@ -81,11 +105,15 @@ public class DayListAdapter extends RecyclerView.Adapter<DayListAdapter.DayViewH
         private TextView dayInsideAdd;
         private DayListAdapter mAdapter; //représente l'adapter (classe parent)
         private View itemView;
+        private Context context;
 
-        /** test **/
         private ArrayList<Activite> activiteArrayList; // Array list qui contient les activite
         private RecyclerView mRecyclerViewActivite;
         private ActiviteListAdapter mAdapterActivite;
+
+        // Pour sauvegarder dans la base de donnee
+        private ActiviteViewModel activiteViewModel;
+        boolean observerSet = false;
 
         public DayViewHolder(View itemView, DayListAdapter adapter) {
             super(itemView);
@@ -94,8 +122,13 @@ public class DayListAdapter extends RecyclerView.Adapter<DayListAdapter.DayViewH
             this.dayInsideAdd = itemView.findViewById(R.id.TextViewInsideAdd); // Recherche la textview dans le layout
             this.mAdapter = adapter; // initialise l'adapteur de la view
             this.itemView = itemView;
+            this.context = itemView.getContext();
 
             activiteArrayList = new ArrayList<>();
+
+            // View model des activite
+            activiteViewModel = ViewModelProviders.of((FragmentActivity) context).get(ActiviteViewModel.class);
+
             //Initialisation le recyclerview
             mRecyclerViewActivite = itemView.findViewById(R.id.recyclerviewActivite);
             //Crée un objet ActiviteListAdapter avec la source de donnée
@@ -104,6 +137,36 @@ public class DayListAdapter extends RecyclerView.Adapter<DayListAdapter.DayViewH
             mRecyclerViewActivite.setAdapter(mAdapterActivite);
             //Définir un gestionnaire de layout par défaut pour RecyclerView
             mRecyclerViewActivite.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
+
+            ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                @Override
+                public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
+                    return false;
+                }
+
+                @Override
+                public void onSwiped(@NonNull RecyclerView.ViewHolder target, int i) {
+                    int position = target.getAdapterPosition();
+                    //activiteArrayList.remove(position);
+                    activiteViewModel.delete(mAdapterActivite.getActiviteAtPosition(position));
+                    mAdapter.notifyDataSetChanged();
+                }
+            });
+
+            helper.attachToRecyclerView(mRecyclerViewActivite);
+        }
+
+        public void setLiveDataObserver(String dayId){
+            if(!observerSet){ // Permet de set l'observeur une seul fois
+                getActiviteViewModel().setDayId(dayId); // Set l'id du jour de l'activite au view model
+                getActiviteViewModel().getAllActivites().observe((LifecycleOwner) context, new Observer<List<Activite>>() {
+                    @Override
+                    public void onChanged(@Nullable List<Activite> activites) {
+                        getmAdapterActivite().setActiviteList((ArrayList<Activite>) activites);
+                    }
+                });
+                observerSet = true;
+            }
         }
 
         public ArrayList<Activite> getActiviteArrayList() {
@@ -135,6 +198,14 @@ public class DayListAdapter extends RecyclerView.Adapter<DayListAdapter.DayViewH
 
         public RecyclerView getmRecyclerViewActivite() {
             return mRecyclerViewActivite;
+        }
+
+        public ActiviteViewModel getActiviteViewModel() {
+            return activiteViewModel;
+        }
+
+        public void setActiviteViewModel(ActiviteViewModel activiteViewModel) {
+            this.activiteViewModel = activiteViewModel;
         }
     }
 }

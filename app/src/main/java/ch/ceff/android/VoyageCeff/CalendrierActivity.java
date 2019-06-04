@@ -1,23 +1,28 @@
 package ch.ceff.android.VoyageCeff;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 public class CalendrierActivity extends AppCompatActivity implements DayListAdapter.DayListClickListener {
 
@@ -30,11 +35,10 @@ public class CalendrierActivity extends AppCompatActivity implements DayListAdap
     private RecyclerView mRecyclerView;
     private DayListAdapter mAdapter;
     private DayListAdapter.DayViewHolder dayViewHolderOpen; // DayViewHolder actuellement ouvert
-
-    // Sauvegarde de l'adapter de daylist
-    private static final String LIST_STATE = "list_state";
-    private static final String BUNDLE_RECYCLER_LAYOUT = "recycler_layout";
-    private Parcelable savedRecyclerLayoutState;
+    private LocalDateParceable currentDate; // Date actuellement ouverte
+    // Pour sauvegarder dans la base de donnee
+    private LocalDateParceableViewModel localDateParceableViewModel;
+    private ActiviteViewModel actualActiviteViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,13 +71,7 @@ public class CalendrierActivity extends AppCompatActivity implements DayListAdap
             }
         });
 
-        // Initialise la dayList
-        if(savedInstanceState != null){
-            dayList = savedInstanceState.getParcelableArrayList(LIST_STATE);
-            savedRecyclerLayoutState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
-        }else{
-            dayList = new ArrayList<>();
-        }
+        dayList = new ArrayList<>();
 
         //Initialisation le recyclerview
         mRecyclerView = findViewById(R.id.recyclerview);
@@ -83,10 +81,34 @@ public class CalendrierActivity extends AppCompatActivity implements DayListAdap
         mRecyclerView.setAdapter(mAdapter);
         //Définir un gestionnaire de layout par défaut pour RecyclerView
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        // Resorte layout manager position
-        if(savedRecyclerLayoutState != null){
-            mRecyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
-        }
+
+        // View Model
+        localDateParceableViewModel = ViewModelProviders.of(this).get(LocalDateParceableViewModel.class);
+        localDateParceableViewModel.getAllLocalDatesParceable().observe(this, new Observer<List<LocalDateParceable>>() {
+            @Override
+            public void onChanged(@Nullable List<LocalDateParceable> localDateParceables) {
+                // Ajoute la list dans la base
+                mAdapter.setDayList((ArrayList<LocalDateParceable>) localDateParceables);
+                Log.d(TAG, "Update la liste depuis la base de donnée");
+            }
+        });
+
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder target, int i) {
+                int position = target.getAdapterPosition();
+                //dayList.remove(position);
+                localDateParceableViewModel.delete(mAdapter.getLocalDateAtPosition(position));
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+
+        helper.attachToRecyclerView(mRecyclerView);
     }
 
     @Override
@@ -109,19 +131,28 @@ public class CalendrierActivity extends AppCompatActivity implements DayListAdap
                 int endHour = data.getIntExtra(TimePickerActivity.EXTRA_REPLY_END_HOUR, 13);
                 int endMinute = data.getIntExtra(TimePickerActivity.EXTRA_REPLY_END_MINUTE, 30);
                 String titreActivite = data.getStringExtra(TimePickerActivity.EXTRA_REPLY_TITRE_ACTIVITE);
+
                 // Ajoute l'activité
-                dayViewHolderOpen.getActiviteArrayList().add(new Activite(startHour, startMinute, endHour, endMinute, titreActivite));
+                Activite ajoutActivite = new Activite(startHour, startMinute, endHour, endMinute, titreActivite);
+
+                // Donne l'id du jour actuellement ouvert a l'activité
+                dayViewHolderOpen.getActiviteArrayList().add(ajoutActivite);
                 sortActivityArray(dayViewHolderOpen.getActiviteArrayList());
                 dayViewHolderOpen.getmRecyclerViewActivite().setVisibility(View.VISIBLE);
+
+                ajoutActivite.setIdDay(currentDate.getId()); // Ajoute l'id du jour a l'activite
+
+                dayViewHolderOpen.getActiviteViewModel().insert(ajoutActivite); // Ajoute l'activite dans la base
+
                 dayViewHolderOpen.getmAdapterActivite().notifyDataSetChanged(); // Notifie que on a ajouté une activité
             }
         }
     }
 
-
     public void addDay(LocalDateParceable localDate){
         dayList.add(localDate);
         sortDayListArray(dayList);
+        localDateParceableViewModel.insert(localDate); // Ajoute la date dans la base de donnée
         mAdapter.notifyDataSetChanged(); // On notifie que on a ajoute qqch dedans
     }
 
@@ -134,13 +165,17 @@ public class CalendrierActivity extends AppCompatActivity implements DayListAdap
 
     // On redéfinit la méthode de DayListAdapter.DayListClickListener
     @Override
-    public void dayListClick(DayListAdapter.DayViewHolder dayViewHolder) {
+    public void dayListClick(DayListAdapter.DayViewHolder dayViewHolder, LocalDateParceable currentDate) {
         if(dayViewHolderOpen != null){ // On a déja ouvert un jour
             hideChildrenSinceSecondView(dayViewHolderOpen); // Ferme le jour
         }
-        dayViewHolderOpen = dayViewHolder; // Init le jour actuellement ouvert
+        this.dayViewHolderOpen = dayViewHolder; // Init le jour actuellement ouvert
+        Log.d(TAG, "Mets a jour le dayviewholder actuel");
+        this.currentDate = currentDate; // Met a jour la date actuelle
+        Log.d(TAG, "Mets a jour la date actuelle");
         dayViewHolderOpen.getDayInsideAdd().setVisibility(View.VISIBLE); // Affiiche la flèche pour ajouter une activité
         dayViewHolderOpen.getmRecyclerViewActivite().setVisibility(View.VISIBLE);
+        dayViewHolderOpen.setLiveDataObserver(currentDate.getId()); // Met l'observeur a jour sur le live data de la liste d'activites si pas encore fait
     }
 
     // On redéfinit la méthode de DayListAdapter.DayListClickListener
@@ -169,13 +204,5 @@ public class CalendrierActivity extends AppCompatActivity implements DayListAdap
                 return object1.getLocalDate().compareTo(object2.getLocalDate()) ;
             }
         });
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState){
-        super.onSaveInstanceState(savedInstanceState);
-        // Changement de configuration
-        savedInstanceState.putParcelableArrayList(LIST_STATE, dayList);
-        savedInstanceState.putParcelable(BUNDLE_RECYCLER_LAYOUT, mRecyclerView.getLayoutManager().onSaveInstanceState());
     }
 }
