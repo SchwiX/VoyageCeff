@@ -40,6 +40,8 @@ public class CalendrierActivity extends AppCompatActivity implements DayListAdap
     private LocalDateParceableViewModel localDateParceableViewModel;
     private ActiviteViewModel actualActiviteViewModel;
 
+    //TODO : Regarder le truc qui fait que les activités d'un jour se déplacent au jour qu'on rajoute
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
