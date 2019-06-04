@@ -1,35 +1,39 @@
 package ch.ceff.android.VoyageCeff;
 
-import android.content.Context;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import ch.ceff.android.VoyageCeff.db.TaskContract;
+import ch.ceff.android.VoyageCeff.db.TaskDbHelper;
 
 public class CheckListActivity extends AppCompatActivity {
 
     // Variables
     private static final String TAG = CheckListActivity.class.getSimpleName();
-    private ArrayList<String> mCheckList = new ArrayList<>();
-    private RecyclerView mRecyclerView;
-    private CheckListAdapter mAdapter;
-    private String m_Text = "";
+    private TaskDbHelper mHelper;
+    private ListView mTaskListView;
+    private ArrayAdapter<String> mAdapter;
+    private CheckBox title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,28 +56,16 @@ public class CheckListActivity extends AppCompatActivity {
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(couleur)));
         /** **/
 
+        mHelper = new TaskDbHelper(this);
+        mTaskListView = findViewById(R.id.list_todo);
 
-        init();
-
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Log.d(TAG, "I'm trying to add something");
-                showAddItemDialog(CheckListActivity.this);
-            }
-        });
-    }
-
-    //TODO : Change to card view boxes
-    private void init() {
-        mRecyclerView = findViewById(R.id.check_list_recycler_view);
-        mAdapter = new CheckListAdapter(this, mCheckList);
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        updateUI();
 
     }
+
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -84,24 +76,30 @@ public class CheckListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.check_list_menu:
-                //TODO: Edit -> Shows the [X] buttons
-                Log.d(TAG, "Hide/Show delete buttons");
-
-                /*
-                if(mRecyclerView.findViewById(R.id.button).getVisibility() == View.INVISIBLE){
-                    mRecyclerView.findViewById(R.id.button).setVisibility(View.VISIBLE);
-                }else if(mRecyclerView.findViewById(R.id.button).getVisibility() == View.VISIBLE){
-                    mRecyclerView.findViewById(R.id.button).setVisibility(View.INVISIBLE);
-                }*/
-
-                /**
-                 * WIP:
-                 * 1. Gerer tout ici -> Fail : marque que sure le premier
-                 * 2. Pointer sur checkListAdapter -> Fail : Can't access ViewHolder
-                 * 3. Give up ... ?
-                 **/
-
+            case R.id.action_add_task:
+                final EditText taskEditText = new EditText(this);
+                AlertDialog dialog = new AlertDialog.Builder(this)
+                        .setTitle("Ajouter une tâche")
+                        .setView(taskEditText)
+                        .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String task = String.valueOf(taskEditText.getText());
+                                SQLiteDatabase db = mHelper.getWritableDatabase();
+                                ContentValues values = new ContentValues();
+                                values.put(TaskContract.TaskEntry.COL_TASK_TITLE, task);
+                                values.put(TaskContract.TaskEntry.CHECK_BOX, false);
+                                db.insertWithOnConflict(TaskContract.TaskEntry.TABLE,
+                                        null,
+                                        values,
+                                        SQLiteDatabase.CONFLICT_REPLACE);
+                                db.close();
+                                updateUI();
+                            }
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .create();
+                dialog.show();
                 return true;
 
             default:
@@ -109,40 +107,61 @@ public class CheckListActivity extends AppCompatActivity {
         }
     }
 
-    private void showAddItemDialog(Context c) {
-        //TODO : Cleaner dialog box ! (Try use checklist_dialog_box.xml)
-        AlertDialog.Builder builder = new AlertDialog.Builder(c);
-        builder.setTitle("Ajout d'une tâche");
-        builder.setMessage("Titre de la tâche");
+    public void boxChecked(View view) {
+        title = findViewById(R.id.check_list_title);
 
-        // Set up the input
-        final EditText input = new EditText(c);
-        // Specify the type of input expected
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-
-        builder.setView(input);
-
-        // Set up the buttons
-        builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                m_Text = input.getText().toString();
-                newBox(m_Text);
-            }
-        });
-        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        builder.show();
+        if(title.isChecked()){
+            title.setPaintFlags(title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            updateBox(true);
+        }else if (!title.isChecked()){
+            title.setPaintFlags(title.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            updateBox(false);
+        }
     }
 
-    private void newBox(String s) {
-        int wordListSize = mCheckList.size();
-        mCheckList.add(s);
-        mRecyclerView.getAdapter().notifyItemInserted(wordListSize);
-        mRecyclerView.smoothScrollToPosition(wordListSize);
+    private void updateBox(boolean b) {
+        /*SQLiteDatabase db = mHelper.getReadableDatabase();
+        db.update(TaskContract.TaskEntry.TABLE,)*/
     }
+
+    public void deleteTask(View view) {
+        View parent = (View) view.getParent();
+        TextView taskTextView = parent.findViewById(R.id.check_list_title);
+        String task = String.valueOf(taskTextView.getText());
+        SQLiteDatabase db = mHelper.getWritableDatabase();
+        db.delete(TaskContract.TaskEntry.TABLE,
+                TaskContract.TaskEntry.COL_TASK_TITLE + " = ?",
+                new String[]{task});
+        db.close();
+        updateUI();
+    }
+
+    private void updateUI() {
+        ArrayList<String> taskList = new ArrayList<>();
+        SQLiteDatabase db = mHelper.getReadableDatabase();
+        Cursor cursor = db.query(TaskContract.TaskEntry.TABLE,
+                new String[]{TaskContract.TaskEntry._ID, TaskContract.TaskEntry.COL_TASK_TITLE},
+                null, null, null, null, null);
+        while (cursor.moveToNext()) {
+            int idx = cursor.getColumnIndex(TaskContract.TaskEntry.COL_TASK_TITLE);
+            taskList.add(cursor.getString(idx));
+        }
+
+        if (mAdapter == null) {
+            mAdapter = new ArrayAdapter<>(this,
+                    R.layout.checklist_item,
+                    R.id.check_list_title,
+                    taskList);
+            mTaskListView.setAdapter(mAdapter);
+        } else {
+            mAdapter.clear();
+            mAdapter.addAll(taskList);
+            mAdapter.notifyDataSetChanged();
+        }
+
+        cursor.close();
+        db.close();
+    }
+
+
 }
