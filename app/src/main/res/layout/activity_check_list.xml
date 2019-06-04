@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".CheckListActivity">
 
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ListView
+            android:id="@+id/listview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </android.support.v7.widget.LinearLayoutCompat>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
@@ -14,10 +23,5 @@
         android:src="@drawable/ic_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/check_list_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
 </android.support.constraint.ConstraintLayout>

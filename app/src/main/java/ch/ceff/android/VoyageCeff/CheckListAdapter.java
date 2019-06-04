@@ -16,7 +16,7 @@ import java.util.ArrayList;
 class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.WordViewHolder>{
 
     private static final String TAG = CheckListAdapter.class.getSimpleName();
-    private ArrayList<CheckListClass> myItems = new ArrayList<>();
+    private ArrayList<CheckListClass> myItems;
     private LayoutInflater mInflater;
 
     class WordViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -85,9 +85,6 @@ class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.WordViewHol
     public void onBindViewHolder(@NonNull CheckListAdapter.WordViewHolder wordViewHolder, int i) {
         final CheckListClass mCurrent = myItems.get(i);
         wordViewHolder.wordItemView.setText(mCurrent.getTitre());
-
-        //in some cases, it will prevent unwanted situations
-        wordViewHolder.wordItemView.setOnCheckedChangeListener(null);
 
         //if true, your checkbox will be selected, else unselected
         wordViewHolder.wordItemView.setChecked(mCurrent.isChecked());
