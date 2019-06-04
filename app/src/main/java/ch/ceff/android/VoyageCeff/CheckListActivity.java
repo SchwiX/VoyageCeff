@@ -108,7 +108,7 @@ public class CheckListActivity extends AppCompatActivity {
     }
 
     public void boxChecked(View view) {
-        title = findViewById(R.id.check_list_title);
+        /*title = findViewById(R.id.check_list_title);
 
         if(title.isChecked()){
             title.setPaintFlags(title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -116,12 +116,12 @@ public class CheckListActivity extends AppCompatActivity {
         }else if (!title.isChecked()){
             title.setPaintFlags(title.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
             updateBox(false);
-        }
+        }*/
     }
 
     private void updateBox(boolean b) {
-        /*SQLiteDatabase db = mHelper.getReadableDatabase();
-        db.update(TaskContract.TaskEntry.TABLE,)*/
+        SQLiteDatabase db = mHelper.getReadableDatabase();
+        //db.update(TaskContract.TaskEntry.TABLE,)
     }
 
     public void deleteTask(View view) {
