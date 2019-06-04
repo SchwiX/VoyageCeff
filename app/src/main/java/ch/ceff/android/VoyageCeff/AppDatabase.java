@@ -19,7 +19,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     INSTANCE =
                             Room.databaseBuilder(context.getApplicationContext(),
                                     AppDatabase.class,
-                                    "localdate_database_5").build();
+                                    "localdate_database_5").allowMainThreadQueries().build();
                 }
             }
         }

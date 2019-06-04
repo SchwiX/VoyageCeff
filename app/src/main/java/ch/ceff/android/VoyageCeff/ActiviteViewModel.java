@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ActiviteViewModel extends AndroidViewModel {
@@ -18,6 +20,7 @@ public class ActiviteViewModel extends AndroidViewModel {
     private ActiviteDao activiteDao;
     private AppDatabase appDatabase;
     private LiveData<List<Activite>> mAllActivites;
+    private LiveData<List<Activite>> mAllActivitesToday;
 
     public ActiviteViewModel(@NonNull Application application) {
         super(application);
@@ -37,6 +40,18 @@ public class ActiviteViewModel extends AndroidViewModel {
         this.mAllActivites = activiteDao.getAllActivitesFromIdDay(this.dayId); // Retourne toutes les activites du jour depuis la base
         Log.d(TAG, "Id du jour " + dayId);
         return mAllActivites;
+    }
+
+    LiveData<List<Activite>> getAllActivitesToday(){
+        LocalDate date= LocalDate.now();
+        int dateYear = date.getYear();
+        Log.d(TAG, "dateYear " + dateYear);
+        int dateMonth = date.getMonthValue();
+        Log.d(TAG, "dateMonth " + dateMonth);
+        int dateDay = date.getDayOfMonth();
+        Log.d(TAG, "dateDay " + dateDay);
+        this.mAllActivitesToday = activiteDao.getAllActivitesFromToday(dateDay, dateMonth, dateYear); // Retourne toutes les activites du jour depuis la base
+        return mAllActivitesToday;
     }
 
     @Override

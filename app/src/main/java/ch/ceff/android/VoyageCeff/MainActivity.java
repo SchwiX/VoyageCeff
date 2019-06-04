@@ -1,12 +1,18 @@
 package ch.ceff.android.VoyageCeff;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -16,12 +22,20 @@ import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    private ActiviteViewModel actualActiviteViewModel; // Permet l'accès a la base de donnée
+
+    private RecyclerView mRecyclerView;
+    private ActiviteListAdapter mAdapter;
+    private ArrayList<Activite> activiteList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +60,28 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(couleur)));
         /** **/
 
-        setJour();
+        setJour(); // Affiche le jour actuel
+
+        activiteList = new ArrayList<>();
+
+        //Initialisation le recyclerview
+        mRecyclerView = findViewById(R.id.recyclerview);
+        //Crée un objet ActiviteListAdapter avec la source de donnée
+        mAdapter = new ActiviteListAdapter(this, activiteList);
+        //Connexion du recyclerview qui est connecté avec l'adapter qui contient la liste de donnée
+        mRecyclerView.setAdapter(mAdapter);
+        //Définir un gestionnaire de layout par défaut pour RecyclerView
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Permet l'accès a la base de donnée
+        actualActiviteViewModel = ViewModelProviders.of(this).get(ActiviteViewModel.class);
+        actualActiviteViewModel.getAllActivitesToday().observe(this, new Observer<List<Activite>>() {
+            @Override
+            public void onChanged(@Nullable List<Activite> activiteList) {
+                mAdapter.setActiviteList((ArrayList<Activite>) activiteList);
+                Log.d(TAG, "Update la liste des activite du jour depuis la base de donnée");
+            }
+        });
     }
 
     public void setJour() {
@@ -54,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
         String date = df.format(Calendar.getInstance().getTime());
         TextView tv = (TextView) findViewById(R.id.tv_atm_date);
         tv.setText(date);
-
     }
 
     @Override
